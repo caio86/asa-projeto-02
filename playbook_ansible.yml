@@ -1,0 +1,53 @@
+- name: Playbook geral
+  hosts: all
+  become: true
+  vars:
+    upgrade: false
+  tasks:
+    # System update
+
+    - name: Update and upgrade system
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        upgrade: "{{ upgrade }}"
+
+    # Docker installation
+
+    - name: Download Docker installation script
+      get_url:
+        url: https://get.docker.com
+        dest: /tmp/get-docker.sh
+        mode: "0700"
+
+    - name: Run Docker installation script
+      command: /tmp/get-docker.sh
+      args:
+        creates: /usr/bin/docker
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add User to Docker Group
+      user:
+        name: "vagrant"
+        groups: docker
+        append: yes
+
+    # Docker compose configuration
+
+    - name: Copy docker-compose.yml
+      copy:
+        src: ./docker-compose.yml
+        dest: /opt/docker-compose.yml
+        mode: "0644"
+
+    - name: Start docker compose services
+      command: docker compose up -d
+      args:
+        chdir: /opt
+      # changed_when:
+      #   - "'Recreated' in compose_output.stdout or 'Started' in compose_output.stdout or 'Created' in compose_output.stdout"
