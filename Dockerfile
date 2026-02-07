@@ -1,9 +1,6 @@
-FROM nginx:stable-latest
+FROM nginx:stable-alpine
 
-RUN apt-get update && apt-get install -y \
-    curl \
-    iputils-ping \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl iputils
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
