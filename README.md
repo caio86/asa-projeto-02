@@ -23,20 +23,14 @@ Repositorio com a infraestrutura completa para subir o Wordpress usando Vagrant,
 - Docker Hub para publicar a imagem do `webproxy`
 
 **Como Executar**
-1. Gere e publique a imagem do proxy:
 
-```bash
-docker build -t caio86/asa-projeto-02-webproxy .
-docker push caio86/asa-projeto-02-webproxy
-```
-
-2. Suba a VM e rode o provisionamento:
+1. Suba a VM e rode o provisionamento:
 
 ```bash
 vagrant up
 ```
 
-3. Acesse no navegador:
+2. Acesse no navegador:
 
 ```
 http://192.168.56.122:8080
